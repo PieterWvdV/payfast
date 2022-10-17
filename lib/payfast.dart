@@ -4,6 +4,7 @@
 library payfast;
 
 export 'src/payfast_base.dart';
+export 'src/merchant_details.dart';
 export 'src/enums.dart';
 
 

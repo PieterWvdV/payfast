@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:payfast/src/billing_types/recurring_billing_types.dart/subscription_editing.dart';
 import 'package:payfast/src/billing_types/recurring_billing_types.dart/subscription_payment.dart';
 import 'package:payfast/src/billing_types/recurring_billing_types.dart/tokenization_billing.dart';
 import 'package:payfast/src/merchant_details.dart';
@@ -24,7 +27,7 @@ class Payfast {
     required this.merchantDetails,
   });
 
-  String generateURL() {
+  String generatePaymentURL() {
     Map<String, dynamic> queryParameters = {};
     //Simple Payment
     if (paymentType == PaymentType.SimplePayment) {
@@ -43,6 +46,9 @@ class Payfast {
           RecurringPaymentType.subscription) {
         Map<String, dynamic> recurringSubscriptionQueryParameters = {
           ...merchantDetails.toMap(),
+          'name_first': recurringBilling?.subscriptionPayment?.name_first,
+          'name_last': recurringBilling?.subscriptionPayment?.name_last,
+          'email_address': recurringBilling?.subscriptionPayment?.email_address,
           'amount': recurringBilling?.subscriptionPayment?.amount,
           'item_name': recurringBilling?.subscriptionPayment?.item_name,
           'subscription_type':
@@ -111,6 +117,9 @@ class Payfast {
     required int cycles,
     required FrequencyCyclePeriod cyclePeriod,
     required int recurringAmount,
+    String? firstName,
+    String? lastName,
+    String? emailAddress,
   }) {
     recurringBilling!.subscriptionPayment = SubscriptionPayment(
       amount: amount.toString(),
@@ -119,6 +128,9 @@ class Payfast {
       recurring_amount: recurringAmount.toString(),
       frequency: (cyclePeriod.index + 3).toString(),
       cycles: cycles.toString(),
+      name_first: firstName,
+      name_last: lastName,
+      email_address: emailAddress
     );
   }
 
@@ -150,5 +162,32 @@ class Payfast {
     recurringTokenizationQueryParameters.addEntries(signatureEntry.entries);
 
     print(recurringTokenizationQueryParameters);
+  }
+
+  /**
+   * This can only be used on the production server
+   */
+  SubscriptionEditing generateSubscriptionCancelInfo(String subscriptionToken) {
+    Map<String, dynamic> headers = {
+      "merchant-id": merchantDetails.merchantId,
+      "version": "v1",
+      "timestamp": DateTime.now().toString()
+    };
+
+    return SubscriptionEditing(
+        url: Uri.decodeComponent(
+          Uri(
+            scheme: 'https',
+            host: 'api.payfast.co.za',
+            path: '/subscriptions/$subscriptionToken/cancel',
+          ).toString(),
+        ),
+        headers: {
+          ...headers,
+          'signature': SignatureService.createSignature(
+            headers,
+            passphrase,
+          ),
+        });
   }
 }

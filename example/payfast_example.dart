@@ -11,10 +11,10 @@ void main() {
     paymentType: PaymentType.SimplePayment,
     production: false,
     merchantDetails: MerchantDetails(
-      merchant_id: '10026561',
-      merchant_key: 'cwon220sjr9ga',
-      notify_url: 'https://b5f5-196-30-8-166.eu.ngrok.io',
-      return_url: 'https://google.com',
+      merchantId: '10026561',
+      merchantKey: 'cwon220sjr9ga',
+      notifyUrl: 'https://b5f5-196-30-8-166.eu.ngrok.io',
+      returnUrl: 'https://google.com',
     ),
   );
 

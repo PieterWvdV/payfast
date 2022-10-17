@@ -1,25 +1,25 @@
 class MerchantDetails {
-  String merchant_id;
-  String merchant_key;
-  String? return_url;
-  String? cancel_url;
-  String? notify_url;
+  String merchantId;
+  String merchantKey;
+  String? returnUrl;
+  String? cancelUrl;
+  String? notifyUrl;
 
   MerchantDetails({
-    required this.merchant_id,
-    required this.merchant_key,
-    this.return_url,
-    this.cancel_url,
-    this.notify_url,
+    required this.merchantId,
+    required this.merchantKey,
+    this.returnUrl,
+    this.cancelUrl,
+    this.notifyUrl,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      "merchant_id": merchant_id,
-      "merchant_key": merchant_key,
-      if (return_url != null) "return_url": return_url,
-      if (cancel_url != null) "cancel_url": cancel_url,
-      if (notify_url != null) "notify_url": notify_url,
+      "merchant_id": merchantId,
+      "merchant_key": merchantKey,
+      if (returnUrl != null) "return_url": returnUrl,
+      if (cancelUrl != null) "cancel_url": cancelUrl,
+      if (notifyUrl != null) "notify_url": notifyUrl,
     };
   }
 }

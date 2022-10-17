@@ -8,14 +8,14 @@ class SignatureService {
     var md5 = crypto.md5;
     String parameters = '';
     for (var element in queryParameters.keys) {
-      if (element.contains("url")) {
+      // if (element.contains("url") || element.contains("email")) {
         parameters +=
             '${'$element=${Uri.encodeComponent(queryParameters[element])}'}&';
-      } else {
-        parameters += '${'$element=' + queryParameters[element]}&';
-      }
+      // } else {
+      //   parameters += '${'$element=' + queryParameters[element]}&';
+      // }
     }
     parameters += "passphrase=$passphrase";
-    return md5.convert(Utf8Encoder().convert(parameters)).toString();
+    return md5.convert(utf8.encode(parameters.replaceAll("%20", "+"))).toString();
   }
 }
